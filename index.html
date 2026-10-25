@@ -4,6 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
+  <meta name="hap-version" content="13">
+  <script>
+    console.log('Hassan Allam support page v13');
+    /* true for anything the Webex chat script adds to the page (wherever it adds it) */
+    function hapIsWidget(el) {
+      if (!el || el.nodeType !== 1) return false;
+      if (/^(HTML|HEAD|BODY|SCRIPT|STYLE|LINK|META|TITLE|NOSCRIPT)$/.test(el.tagName)) return false;
+      if (el.id === 'divicw' || el.id === 'tls_al_frm') return false;
+      if (el.closest('head, .site-header, .hero, section.block, .site-footer, .hap-ui')) return false;
+      return true;
+    }
+  </script>
   <style>
     :root {
       --ink: #1c2229;
@@ -240,8 +252,7 @@
           for (var k = 0; k < all.length && !open; k++) {
             var el = all[k];
             if (el.id === 'tls_al_frm') continue;
-            if (el.getRootNode() === document &&
-                !(anchor.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+            if (el.getRootNode() === document && !hapIsWidget(el)) continue;
             var r = el.getBoundingClientRect();
             if (r.width > 250 && r.height > 250 && r.right > w - 300 && r.bottom > h - 300 && r.top < h - 300) {
               var s = getComputedStyle(el);
@@ -318,7 +329,7 @@
         var els = root.querySelectorAll('*');
         for (var k = 0; k < els.length; k++) {
           var el = els[k];
-          if (!inWidget && !(anchor && (anchor.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))) continue;
+          if (!inWidget && !hapIsWidget(el)) continue;
           if (el.closest && el.closest('.hap-ui')) continue;
           out.push(el);
           if (el.shadowRoot) walk(el.shadowRoot, true);
@@ -332,7 +343,7 @@
     document.addEventListener('click', function (e) {
       var anchor = document.getElementById('divicw');
       var t = e.target;
-      if (anchor && t && t.nodeType === 1 && (anchor.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING) && !t.closest('.hap-ui')) {
+      if (hapIsWidget(t)) {
         startNewConversationIfEmpty();
       }
     }, true);
@@ -387,7 +398,7 @@
           var els = root.querySelectorAll('*');
           for (var k = 0; k < els.length; k++) {
             var el = els[k];
-            if (!inW && !(anchor && (anchor.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))) continue;
+            if (!inW && !hapIsWidget(el)) continue;
             if (el.closest && el.closest('.hap-ui')) continue;
             if (el.id === 'tls_al_frm') continue;
             out.push(el);
