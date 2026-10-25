@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="13">
+  <meta name="hap-version" content="14">
   <script>
-    console.log('Hassan Allam support page v13');
+    console.log('Hassan Allam support page v14');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -371,9 +371,9 @@
   <style>
     /* Taller header (like the Engage preview) with small logo and text */
     #chatBrand { position: fixed; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-      pointer-events: none; z-index: 2147483646; background: #000; color: #fff; text-align: center;
+      pointer-events: none; z-index: 2147483647; background: #000; color: #fff; text-align: center;
       font-family: "Segoe UI", Arial, Helvetica, sans-serif; overflow: hidden; }
-    #chatBrandExt { position: fixed; display: none; pointer-events: none; z-index: 2147483645; background: #000;
+    #chatBrandExt { position: fixed; display: none; pointer-events: none; z-index: 2147483647; background: #000;
       box-shadow: 0 6px 10px -6px rgba(0,0,0,.35); }
     #chatBrand.on, #chatBrandExt.on { display: flex; }
     #chatBrand img { height: 28px; width: auto; border-radius: 4px; display: block; margin-bottom: 2px; }
@@ -427,7 +427,7 @@
         }
         if (!panel) { box.classList.remove('on'); ext.classList.remove('on'); return; }
         /* Height of the widget's top bar (falls back to 64px) */
-        var barH = 64;
+        var barH = 68;
         for (var j = 0; j < all.length; j++) {
           var b = all[j].getBoundingClientRect();
           if (Math.abs(b.top - panel.top) < 3 && b.width > panel.width - 8 && b.height >= 40 && b.height <= 140 && dark(all[j]) && ok(all[j])) { barH = b.height; break; }
@@ -444,6 +444,9 @@
         ext.style.top = (panel.top + barH) + 'px';
         ext.style.height = Math.max(0, total - barH) + 'px';
         syncLogo();
+        /* Keep the header as the last elements on the page so it stays on top of the Webex window
+           (both use the highest z-index; the later element wins) */
+        if (document.body.lastElementChild !== box) { document.body.appendChild(ext); document.body.appendChild(box); }
         box.classList.add('on');
         ext.classList.toggle('on', total > barH);
       }
