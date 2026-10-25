@@ -15,20 +15,22 @@
       --accent-strong: #2f3a45;
       --card: #ffffff;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: "Segoe UI", Arial, Helvetica, sans-serif; color: var(--ink); background: var(--bg); }
-    a { color: inherit; }
+    .site-header, .site-header *, .hero, .hero *, section.block, section.block *, .site-footer, .site-footer *, .hap-ui { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); }
+    /* Page text styles are applied to the page sections only, so the Webex chat widget keeps its own look */
+    .site-header, .hero, section.block, .site-footer { font-family: "Segoe UI", Arial, Helvetica, sans-serif; color: var(--ink); }
+    .site-header a, .hero a, section.block a, .site-footer a { color: inherit; }
 
     /* ---------- Header ---------- */
-    header { background: var(--dark); color: #fff; }
+    .site-header { background: var(--dark); color: #fff; }
     .bar { max-width: 1140px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .brand img { height: 46px; width: auto; display: block; }
     .brand .text-logo { display: none; font-weight: 800; letter-spacing: 3px; font-size: 18px; }
     .brand .text-logo small { display: block; font-weight: 400; letter-spacing: 6px; font-size: 10px; color: var(--accent); }
-    nav { display: flex; gap: 22px; font-size: 14px; }
-    nav a { text-decoration: none; color: #cfd4d9; }
-    nav a:hover { color: #fff; }
+    .site-nav { display: flex; gap: 22px; font-size: 14px; }
+    .site-nav a { text-decoration: none; color: #cfd4d9; }
+    .site-nav a:hover { color: #fff; }
 
     /* ---------- Hero ---------- */
     .hero { background: linear-gradient(120deg, #15191e 0%, #2a323b 60%, #3a444f 100%); color: #fff; }
@@ -66,12 +68,12 @@
     .channel .value { font-size: 18px; font-weight: 600; margin-top: 6px; }
     .channel .note { color: var(--muted); font-size: 13.5px; margin-top: 6px; }
 
-    details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
-    summary { cursor: pointer; font-weight: 600; }
-    details p { color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
+    .faq-item { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+    .faq-item summary { cursor: pointer; font-weight: 600; }
+    .faq-item p { color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
 
-    footer { margin-top: 56px; background: var(--dark); color: #aab1b8; font-size: 13px; }
-    footer .bar { padding: 22px 20px; }
+    .site-footer { margin-top: 56px; background: var(--dark); color: #aab1b8; font-size: 13px; }
+    .site-footer .bar { padding: 22px 20px; }
 
     /* ---------- "Chat with us" side tab ---------- */
     .chat-tab {
@@ -80,7 +82,7 @@
       background: #0b6e99; color: #fff; border: 0; cursor: pointer;
       padding: 16px 10px; border-radius: 0 10px 10px 0;
       font: 600 15px "Segoe UI", Arial, sans-serif; letter-spacing: .5px;
-      box-shadow: 0 4px 14px rgba(0,0,0,.25); z-index: 2147483000;
+      box-shadow: 0 4px 14px rgba(0,0,0,.25); z-index: 1000;
     }
     .chat-tab:hover { background: #095a7d; }
     /* Icon buttons (WhatsApp / Messenger) */
@@ -111,14 +113,14 @@
       .hero .wrap { grid-template-columns: 1fr; padding: 44px 20px 52px; }
       .hero h1 { font-size: 30px; }
       .grid, .channels { grid-template-columns: 1fr; }
-      nav { display: none; }
+      .site-nav { display: none; }
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
-  <header>
+  <header class="site-header">
     <div class="bar">
       <a class="brand" href="#" aria-label="Hassan Allam">
         <!-- Put your logo file next to this page as logo.png; otherwise the online image is used -->
@@ -126,7 +128,7 @@
              onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG4r6k-7ULqOMgu_iz5g9YLIxGF-ZicUzFBeIEfAMoJeVbrm6YoRUnaYc&s=10';}else{this.style.display='none';this.nextElementSibling.style.display='block';}">
         <span class="text-logo">HASSAN ALLAM<small>CUSTOMER SUPPORT</small></span>
       </a>
-      <nav aria-label="Main">
+      <nav class="site-nav" aria-label="Main">
         <a href="#help">How we can help</a>
         <a href="#contact">Contact</a>
         <a href="#faq">FAQ</a>
@@ -198,13 +200,13 @@
   <section class="block" id="faq">
     <h2>Frequently asked questions</h2>
     <p class="sub">Quick answers before you start a chat.</p>
-    <details><summary>What are the live chat working hours?</summary><p>[Add the official working hours]. Outside these hours you can leave your details in the chat and our team will contact you.</p></details>
-    <details><summary>What information should I have ready?</summary><p>Your full name, phone number and, if you are an existing customer, your unit or contract number.</p></details>
-    <details><summary>Can I send documents or photos in the chat?</summary><p>Yes. Use the attachment icon in the chat window to send images or PDF files.</p></details>
-    <details><summary>Is my conversation private?</summary><p>Your conversation is visible only to our customer service team and is used to handle your request.</p></details>
+    <details class="faq-item"><summary>What are the live chat working hours?</summary><p>[Add the official working hours]. Outside these hours you can leave your details in the chat and our team will contact you.</p></details>
+    <details class="faq-item"><summary>What information should I have ready?</summary><p>Your full name, phone number and, if you are an existing customer, your unit or contract number.</p></details>
+    <details class="faq-item"><summary>Can I send documents or photos in the chat?</summary><p>Yes. Use the attachment icon in the chat window to send images or PDF files.</p></details>
+    <details class="faq-item"><summary>Is my conversation private?</summary><p>Your conversation is visible only to our customer service team and is used to handle your request.</p></details>
   </section>
 
-  <footer>
+  <footer class="site-footer">
     <div class="bar">
       <span>© Hassan Allam — Customer Support</span>
       <span>Live chat powered by Webex</span>
@@ -220,6 +222,38 @@
   -->
   <!-- "Chat with us" tab (opens the Webex chat window) -->
   <button type="button" class="chat-tab hap-ui" onclick="openWebexChat()">💬 Chat with us</button>
+  <style>.chat-open .chat-tab { display: none !important; }</style>
+  <script>
+    /* Hide the "Chat with us" tab while the Webex chat window is open, so it never covers the conversation */
+    (function () {
+      /* Look only at what the Webex script adds (everything after #divicw), including open shadow roots */
+      function collect(root, out) {
+        var els = root.querySelectorAll('*');
+        for (var k = 0; k < els.length; k++) { out.push(els[k]); if (els[k].shadowRoot) collect(els[k].shadowRoot, out); }
+        return out;
+      }
+      function check() {
+        var anchor = document.getElementById('divicw');
+        var w = window.innerWidth, h = window.innerHeight, open = false;
+        if (anchor) {
+          var all = collect(document.body, []);
+          for (var k = 0; k < all.length && !open; k++) {
+            var el = all[k];
+            if (el.id === 'tls_al_frm') continue;
+            if (el.getRootNode() === document &&
+                !(anchor.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+            var r = el.getBoundingClientRect();
+            if (r.width > 250 && r.height > 250 && r.right > w - 300 && r.bottom > h - 300 && r.top < h - 300) {
+              var s = getComputedStyle(el);
+              if (s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity || '1') > 0.05) open = true;
+            }
+          }
+        }
+        document.documentElement.classList.toggle('chat-open', open);
+      }
+      setInterval(check, 400);
+    })();
+  </script>
   <script>
     /* WhatsApp number for the green WhatsApp icon: country code + number, digits only (example: "201001234567").
        Leave empty to open WhatsApp Web home page. */
@@ -247,6 +281,7 @@
     /* Opens the Webex chat window by clicking the widget's own button (bottom-right).
        If the widget is not loaded yet, shows a small pointer to the chat button instead. */
     function openWebexChat() {
+      startNewConversationIfEmpty();
       var w = window.innerWidth, h = window.innerHeight;
       var found = Array.prototype.filter.call(document.querySelectorAll('body *'), function (el) {
         if (el.closest('.hap-ui') || el.tagName === 'IFRAME' || el.tagName === 'SCRIPT') return false;
@@ -271,6 +306,51 @@
 
 
   <!-- Webex Live Chat widget -->
+  <script>
+    /* When the chat opens on the empty "No conversations" screen, press "New Conversation"
+       automatically so the customer goes straight to the chat form.
+       Customers who already have conversations still see their list. */
+    var autoNewUntil = 0;
+    function startNewConversationIfEmpty() { autoNewUntil = Date.now() + 8000; }
+    function widgetNodes() {
+      var out = [], anchor = document.getElementById('divicw');
+      function walk(root, inWidget) {
+        var els = root.querySelectorAll('*');
+        for (var k = 0; k < els.length; k++) {
+          var el = els[k];
+          if (!inWidget && !(anchor && (anchor.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING))) continue;
+          if (el.closest && el.closest('.hap-ui')) continue;
+          out.push(el);
+          if (el.shadowRoot) walk(el.shadowRoot, true);
+          if (el.tagName === 'IFRAME') { try { if (el.contentDocument) walk(el.contentDocument, true); } catch (e) {} }
+        }
+      }
+      walk(document, false);
+      return out;
+    }
+    function shown(el) { var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+    document.addEventListener('click', function (e) {
+      var anchor = document.getElementById('divicw');
+      var t = e.target;
+      if (anchor && t && t.nodeType === 1 && (anchor.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING) && !t.closest('.hap-ui')) {
+        startNewConversationIfEmpty();
+      }
+    }, true);
+    setInterval(function () {
+      if (Date.now() > autoNewUntil) return;
+      var nodes = widgetNodes(), empty = false, btn = null;
+      for (var k = 0; k < nodes.length; k++) {
+        var el = nodes[k];
+        if (!shown(el)) continue;
+        var txt = (el.textContent || '').trim();
+        if (!empty && /^No conversations$/i.test(txt)) empty = true;
+        if (!btn && /^New Conversation$/i.test(txt)) {
+          btn = el.closest('button,[role=button],a') || el;
+        }
+      }
+      if (empty && btn) { autoNewUntil = 0; btn.click(); }
+    }, 300);
+  </script>
   <div id="divicw" data-bind="9C2AB91E-209D-42E6-A180-AA9D6318C6D8" data-org="" data-guid="0b455c64-1e5f-4a5a-bf53-16cf7683f2ad"></div><script>var i={t:function(){try{var e=document.getElementById("divicw"),t=document.createElement("script");t.src="https://chat-widget.prodeu1.ciscoccservice.com/js/imichatinit.js?t="+new Date().toISOString(),e.insertAdjacentElement("afterend",t),t.addEventListener("load",function(){console.log(new Date().toISOString(),"Livechat script loaded successfully!")}),t.addEventListener("error",function(){console.log(new Date().toISOString(),"Error loading Livechat script");i.o(e)})}catch(e){console.error(e)}},o:function(e){e.insertAdjacentHTML("afterend",'<iframe id="tls_al_frm" frameborder="0" style="overflow:hidden;height:208px;width:394px;position:fixed;display:block;right:48px;bottom:12px;z-index:99999;display:none;"></iframe>');var t=document.getElementById("tls_al_frm"),n=t.contentWindow,d=n.document;d.open();d.write("<!doctype html><html><head><meta charset='utf-8'><title>Untitled Document</title><style>body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#99a0b0;font-size:14px}.popover__content{background-color:#fbfbfe;padding:1.5rem;border-radius:5px;width:300px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.26);position:relative}.popover__message{font-weight:600;color:#56627c;font-size:16px}.pull-left{float:left}.clearfix{clear:both}.hdr-txt{width:218px;margin-top:3px}.para-txt a{text-decoration:none;color:#005cde}.close-btn{position:absolute;right:15px;top:15px}.close-btn a{text-decoration:none;font-weight:400;color:#56627c;font-size:16px}</style></head><body><div class='popover__content'><div class='close-btn'><a href='#' onclick='closeTLSAlert()'>X</a></div><div class='popover__message'><div class='pull-left hdr-txt'>This browser version is not supported on LiveChat.</div></div><div class='clearfix'></div><p class='para-txt'>Please update your browser to the latest version and re-open the website to access the widget.</p></div><script>function closeTLSAlert(){window.parent.postMessage({key:'close_tls_alert',value:'close_tls_alert',action:'close_tls_alert'},'*');}<\/script></body></html>");d.close();t.style.display='block';window.addEventListener('message',function(e){'close_tls_alert'===e.data.action&&i.s()})},s:function(){var e=document.getElementById('tls_al_frm');e&&e.remove()}};i.t();</script>
 
 </body>
