@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Support | Hassan Allam</title>
+  <style>
+    :root {
+      --ink: #1c2229;
+      --muted: #5d6873;
+      --line: #e3e6ea;
+      --bg: #f4f5f7;
+      --dark: #15191e;
+      --accent: #8a929b;       /* steel grey, matches the logo */
+      --accent-strong: #2f3a45;
+      --card: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Arial, Helvetica, sans-serif; color: var(--ink); background: var(--bg); }
+    a { color: inherit; }
+
+    /* ---------- Header ---------- */
+    header { background: var(--dark); color: #fff; }
+    .bar { max-width: 1140px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand img { height: 46px; width: auto; display: block; }
+    .brand .text-logo { display: none; font-weight: 800; letter-spacing: 3px; font-size: 18px; }
+    .brand .text-logo small { display: block; font-weight: 400; letter-spacing: 6px; font-size: 10px; color: var(--accent); }
+    nav { display: flex; gap: 22px; font-size: 14px; }
+    nav a { text-decoration: none; color: #cfd4d9; }
+    nav a:hover { color: #fff; }
+
+    /* ---------- Hero ---------- */
+    .hero { background: linear-gradient(120deg, #15191e 0%, #2a323b 60%, #3a444f 100%); color: #fff; }
+    .hero .wrap { max-width: 1140px; margin: 0 auto; padding: 64px 20px 72px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+    .eyebrow { text-transform: uppercase; letter-spacing: 2px; font-size: 12px; color: var(--accent); }
+    .hero h1 { font-size: 40px; line-height: 1.15; margin: 10px 0 6px; }
+    .hero .ar { font-size: 22px; color: #d7dbe0; margin: 0 0 16px; direction: rtl; text-align: left; }
+    .hero p.lead { color: #c9ced4; font-size: 17px; line-height: 1.6; max-width: 560px; }
+    .cta { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 12px 22px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 15px; }
+    .btn.primary { background: #fff; color: var(--dark); }
+    .btn.ghost { border: 1px solid #6b7580; color: #fff; }
+    .chat-hint { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 14px; padding: 24px; }
+    .chat-hint h3 { margin: 0 0 8px; font-size: 18px; }
+    .chat-hint p { margin: 0; color: #c9ced4; line-height: 1.6; font-size: 15px; }
+    .steps { margin: 14px 0 0; padding-left: 18px; color: #e3e6ea; font-size: 14px; line-height: 1.8; }
+    .status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #b9f0cf; margin-bottom: 10px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #3ccf7a; box-shadow: 0 0 0 4px rgba(60,207,122,.18); }
+
+    /* ---------- Sections ---------- */
+    section.block { max-width: 1140px; margin: 0 auto; padding: 56px 20px 8px; }
+    section.block h2 { font-size: 26px; margin: 0 0 6px; }
+    section.block .sub { color: var(--muted); margin: 0 0 26px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+    .card .icon { width: 42px; height: 42px; border-radius: 10px; background: #eef0f3; display: grid; place-items: center; font-size: 20px; margin-bottom: 12px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 14.5px; }
+
+    .channels { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+    .channel .value a { color: #0866ff; text-decoration: none; }
+    .btn.messenger { background: #0866ff; color: #fff; }
+    .channel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+    .channel .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+    .channel .value { font-size: 18px; font-weight: 600; margin-top: 6px; }
+    .channel .note { color: var(--muted); font-size: 13.5px; margin-top: 6px; }
+
+    details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; }
+    details p { color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
+
+    footer { margin-top: 56px; background: var(--dark); color: #aab1b8; font-size: 13px; }
+    footer .bar { padding: 22px 20px; }
+
+    @media (max-width: 860px) {
+      .hero .wrap { grid-template-columns: 1fr; padding: 44px 20px 52px; }
+      .hero h1 { font-size: 30px; }
+      .grid, .channels { grid-template-columns: 1fr; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="bar">
+      <a class="brand" href="#" aria-label="Hassan Allam">
+        <!-- Put your logo file next to this page as logo.png; otherwise the online image is used -->
+        <img src="logo.png" alt="Hassan Allam"
+             onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG4r6k-7ULqOMgu_iz5g9YLIxGF-ZicUzFBeIEfAMoJeVbrm6YoRUnaYc&s=10';}else{this.style.display='none';this.nextElementSibling.style.display='block';}">
+        <span class="text-logo">HASSAN ALLAM<small>CUSTOMER SUPPORT</small></span>
+      </a>
+      <nav aria-label="Main">
+        <a href="#help">How we can help</a>
+        <a href="#contact">Contact</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Customer Support</div>
+        <h1>Welcome to Hassan Allam Support</h1>
+        <p class="ar">مرحبًا بكم في خدمة عملاء حسن علام</p>
+        <p class="lead">Our customer service team is here to answer your questions about projects, units, payments and more. Chat with us directly from this page.</p>
+        <div class="cta">
+          <a class="btn primary" href="#start-chat">Chat with us</a>
+          <a class="btn messenger" href="https://www.facebook.com/share/1DiLjDEnJK/" target="_blank" rel="noopener">Messenger</a>
+          <a class="btn ghost" href="#contact">Other ways to reach us</a>
+        </div>
+      </div>
+
+      <div class="chat-hint" id="start-chat">
+        <div class="status"><span class="dot"></span> Live chat</div>
+        <h3>Start a live chat</h3>
+        <p>Click the chat button in the <strong>lower-right corner</strong> of this page.</p>
+        <ol class="steps">
+          <li>Click the chat button</li>
+          <li>Select <strong>New Conversation</strong></li>
+          <li>Share your name and question</li>
+          <li>A support agent will reply here</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" id="help">
+    <h2>How can we help?</h2>
+    <p class="sub">Choose a topic when you start the chat so we can connect you to the right team.</p>
+    <div class="grid">
+      <div class="card"><div class="icon">🏗️</div><h3>Projects &amp; units</h3><p>Information about our projects, unit details, handover and site visits.</p></div>
+      <div class="card"><div class="icon">💳</div><h3>Payments &amp; contracts</h3><p>Installments, receipts, payment schedules and contract questions.</p></div>
+      <div class="card"><div class="icon">🛠️</div><h3>After-sales &amp; maintenance</h3><p>Report an issue in your unit or follow up on a maintenance request.</p></div>
+      <div class="card"><div class="icon">📄</div><h3>Documents &amp; requests</h3><p>Request documents, letters or updates to your customer details.</p></div>
+      <div class="card"><div class="icon">🤝</div><h3>Suppliers &amp; partners</h3><p>Questions about supplier registration and partnership inquiries.</p></div>
+      <div class="card"><div class="icon">💬</div><h3>General inquiries</h3><p>Anything else — our team will route your request to the right department.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <h2>Contact channels</h2>
+    <p class="sub">Live chat is the fastest way to reach us. You can also use:</p>
+    <div class="channels">
+      <!-- Replace the values in [brackets] with the official details before publishing -->
+      <div class="channel"><div class="label">Hotline</div><div class="value">[Hotline number]</div><div class="note">[Working days and hours]</div></div>
+      <div class="channel"><div class="label">Email</div><div class="value">[support email]</div><div class="note">We reply within [X] business days</div></div>
+      <div class="channel"><div class="label">WhatsApp</div><div class="value">[WhatsApp number]</div><div class="note">Message us any time</div></div>
+      <div class="channel">
+        <div class="label">Facebook Messenger</div>
+        <div class="value"><a href="https://www.facebook.com/share/1DiLjDEnJK/" target="_blank" rel="noopener">Message us on Messenger</a></div>
+        <div class="note">Opens our Facebook page — tap <strong>Message</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <h2>Frequently asked questions</h2>
+    <p class="sub">Quick answers before you start a chat.</p>
+    <details><summary>What are the live chat working hours?</summary><p>[Add the official working hours]. Outside these hours you can leave your details in the chat and our team will contact you.</p></details>
+    <details><summary>What information should I have ready?</summary><p>Your full name, phone number and, if you are an existing customer, your unit or contract number.</p></details>
+    <details><summary>Can I send documents or photos in the chat?</summary><p>Yes. Use the attachment icon in the chat window to send images or PDF files.</p></details>
+    <details><summary>Is my conversation private?</summary><p>Your conversation is visible only to our customer service team and is used to handle your request.</p></details>
+  </section>
+
+  <footer>
+    <div class="bar">
+      <span>© Hassan Allam — Customer Support</span>
+      <span>Live chat powered by Webex</span>
+    </div>
+  </footer>
+
+  <!--
+  ==============================================================
+  PASTE THE WEBEX LIVE CHAT WIDGET SCRIPT BLOCK BELOW
+  (Webex Engage > Channel Assets > your Live Chat asset > Installation > Copy)
+  It must stay just BEFORE the closing </body> tag.
+  ==============================================================
+  -->
+  <!-- Webex Live Chat widget -->
+  <div id="divicw" data-bind="9C2AB91E-209D-42E6-A180-AA9D6318C6D8" data-org="" data-guid="0b455c64-1e5f-4a5a-bf53-16cf7683f2ad"></div><script>var i={t:function(){try{var e=document.getElementById("divicw"),t=document.createElement("script");t.src="https://chat-widget.prodeu1.ciscoccservice.com/js/imichatinit.js?t="+new Date().toISOString(),e.insertAdjacentElement("afterend",t),t.addEventListener("load",function(){console.log(new Date().toISOString(),"Livechat script loaded successfully!")}),t.addEventListener("error",function(){console.log(new Date().toISOString(),"Error loading Livechat script");i.o(e)})}catch(e){console.error(e)}},o:function(e){e.insertAdjacentHTML("afterend",'<iframe id="tls_al_frm" frameborder="0" style="overflow:hidden;height:208px;width:394px;position:fixed;display:block;right:48px;bottom:12px;z-index:99999;display:none;"></iframe>');var t=document.getElementById("tls_al_frm"),n=t.contentWindow,d=n.document;d.open();d.write("<!doctype html><html><head><meta charset='utf-8'><title>Untitled Document</title><style>body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#99a0b0;font-size:14px}.popover__content{background-color:#fbfbfe;padding:1.5rem;border-radius:5px;width:300px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.26);position:relative}.popover__message{font-weight:600;color:#56627c;font-size:16px}.pull-left{float:left}.clearfix{clear:both}.hdr-txt{width:218px;margin-top:3px}.para-txt a{text-decoration:none;color:#005cde}.close-btn{position:absolute;right:15px;top:15px}.close-btn a{text-decoration:none;font-weight:400;color:#56627c;font-size:16px}</style></head><body><div class='popover__content'><div class='close-btn'><a href='#' onclick='closeTLSAlert()'>X</a></div><div class='popover__message'><div class='pull-left hdr-txt'>This browser version is not supported on LiveChat.</div></div><div class='clearfix'></div><p class='para-txt'>Please update your browser to the latest version and re-open the website to access the widget.</p></div><script>function closeTLSAlert(){window.parent.postMessage({key:'close_tls_alert',value:'close_tls_alert',action:'close_tls_alert'},'*');}<\/script></body></html>");d.close();t.style.display='block';window.addEventListener('message',function(e){'close_tls_alert'===e.data.action&&i.s()})},s:function(){var e=document.getElementById('tls_al_frm');e&&e.remove()}};i.t();</script>
+
+</body>
+</html>
