@@ -73,7 +73,30 @@
     footer { margin-top: 56px; background: var(--dark); color: #aab1b8; font-size: 13px; }
     footer .bar { padding: 22px 20px; }
 
+    /* ---------- "Chat with us" side tab ---------- */
+    .chat-tab {
+      position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+      writing-mode: vertical-rl; rotate: 180deg;
+      background: #0b6e99; color: #fff; border: 0; cursor: pointer;
+      padding: 16px 10px; border-radius: 0 10px 10px 0;
+      font: 600 15px "Segoe UI", Arial, sans-serif; letter-spacing: .5px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.25); z-index: 2147483000;
+    }
+    .chat-tab:hover { background: #095a7d; }
+    /* Hint shown if the chat window cannot be opened automatically */
+    .chat-pointer {
+      position: fixed; right: 18px; bottom: 96px; z-index: 2147483000;
+      background: #1c2229; color: #fff; padding: 10px 14px; border-radius: 10px;
+      font: 14px "Segoe UI", Arial, sans-serif; box-shadow: 0 4px 14px rgba(0,0,0,.3);
+      display: none;
+    }
+    .chat-pointer::after { content: ""; position: absolute; right: 28px; bottom: -8px;
+      border: 8px solid transparent; border-bottom: 0; border-top-color: #1c2229; }
+    .chat-pointer.show { display: block; animation: pop .25s ease-out; }
+    @keyframes pop { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+
     @media (max-width: 860px) {
+      .chat-tab { top: auto; bottom: 120px; transform: none; }
       .hero .wrap { grid-template-columns: 1fr; padding: 44px 20px 52px; }
       .hero h1 { font-size: 30px; }
       .grid, .channels { grid-template-columns: 1fr; }
@@ -107,7 +130,7 @@
         <p class="ar">مرحبًا بكم في خدمة عملاء حسن علام</p>
         <p class="lead">Our customer service team is here to answer your questions about projects, units, payments and more. Chat with us directly from this page.</p>
         <div class="cta">
-          <a class="btn primary" href="#start-chat">Chat with us</a>
+          <a class="btn primary" href="#start-chat" onclick="return openWebexChat();">💬 Chat with us</a>
           <a class="btn messenger" href="https://www.facebook.com/share/1DiLjDEnJK/" target="_blank" rel="noopener">Messenger</a>
           <a class="btn ghost" href="#contact">Other ways to reach us</a>
         </div>
@@ -116,9 +139,9 @@
       <div class="chat-hint" id="start-chat">
         <div class="status"><span class="dot"></span> Live chat</div>
         <h3>Start a live chat</h3>
-        <p>Click the chat button in the <strong>lower-right corner</strong> of this page.</p>
+        <p>Click <strong>Chat with us</strong> to talk to our customer service team.</p>
         <ol class="steps">
-          <li>Click the chat button</li>
+          <li>Click <strong>Chat with us</strong></li>
           <li>Select <strong>New Conversation</strong></li>
           <li>Share your name and question</li>
           <li>A support agent will reply here</li>
@@ -179,6 +202,36 @@
   It must stay just BEFORE the closing </body> tag.
   ==============================================================
   -->
+  <!-- "Chat with us" tab (opens the Webex chat window) -->
+  <button type="button" class="chat-tab hap-ui" onclick="openWebexChat()" aria-label="Chat with us">💬 Chat with us</button>
+  <div class="chat-pointer hap-ui" id="chatPointer" role="status">Click the chat button here to start ⬇</div>
+
+  <script>
+    /* Opens the Webex chat window by clicking the widget's own button (bottom-right).
+       If the widget is not loaded yet, shows a small pointer to the chat button instead. */
+    function openWebexChat() {
+      var w = window.innerWidth, h = window.innerHeight;
+      var found = Array.prototype.filter.call(document.querySelectorAll('body *'), function (el) {
+        if (el.closest('.hap-ui') || el.tagName === 'IFRAME' || el.tagName === 'SCRIPT') return false;
+        var s = getComputedStyle(el);
+        if (s.position !== 'fixed' || s.display === 'none' || s.visibility === 'hidden') return false;
+        var r = el.getBoundingClientRect();
+        return r.width >= 20 && r.height >= 20 && r.width <= 220 && r.height <= 220 &&
+               r.right > w - 220 && r.bottom > h - 220;
+      });
+      for (var k = 0; k < found.length; k++) {
+        var el = found[k];
+        var target = el.matches('button,[role=button],a') ? el : (el.querySelector('button,[role=button],a,img,svg') || el);
+        target.click();
+        return false;
+      }
+      var p = document.getElementById('chatPointer');
+      p.classList.add('show');
+      setTimeout(function () { p.classList.remove('show'); }, 5000);
+      return false;
+    }
+  </script>
+
   <!-- Webex Live Chat widget -->
   <div id="divicw" data-bind="9C2AB91E-209D-42E6-A180-AA9D6318C6D8" data-org="" data-guid="0b455c64-1e5f-4a5a-bf53-16cf7683f2ad"></div><script>var i={t:function(){try{var e=document.getElementById("divicw"),t=document.createElement("script");t.src="https://chat-widget.prodeu1.ciscoccservice.com/js/imichatinit.js?t="+new Date().toISOString(),e.insertAdjacentElement("afterend",t),t.addEventListener("load",function(){console.log(new Date().toISOString(),"Livechat script loaded successfully!")}),t.addEventListener("error",function(){console.log(new Date().toISOString(),"Error loading Livechat script");i.o(e)})}catch(e){console.error(e)}},o:function(e){e.insertAdjacentHTML("afterend",'<iframe id="tls_al_frm" frameborder="0" style="overflow:hidden;height:208px;width:394px;position:fixed;display:block;right:48px;bottom:12px;z-index:99999;display:none;"></iframe>');var t=document.getElementById("tls_al_frm"),n=t.contentWindow,d=n.document;d.open();d.write("<!doctype html><html><head><meta charset='utf-8'><title>Untitled Document</title><style>body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#99a0b0;font-size:14px}.popover__content{background-color:#fbfbfe;padding:1.5rem;border-radius:5px;width:300px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.26);position:relative}.popover__message{font-weight:600;color:#56627c;font-size:16px}.pull-left{float:left}.clearfix{clear:both}.hdr-txt{width:218px;margin-top:3px}.para-txt a{text-decoration:none;color:#005cde}.close-btn{position:absolute;right:15px;top:15px}.close-btn a{text-decoration:none;font-weight:400;color:#56627c;font-size:16px}</style></head><body><div class='popover__content'><div class='close-btn'><a href='#' onclick='closeTLSAlert()'>X</a></div><div class='popover__message'><div class='pull-left hdr-txt'>This browser version is not supported on LiveChat.</div></div><div class='clearfix'></div><p class='para-txt'>Please update your browser to the latest version and re-open the website to access the widget.</p></div><script>function closeTLSAlert(){window.parent.postMessage({key:'close_tls_alert',value:'close_tls_alert',action:'close_tls_alert'},'*');}<\/script></body></html>");d.close();t.style.display='block';window.addEventListener('message',function(e){'close_tls_alert'===e.data.action&&i.s()})},s:function(){var e=document.getElementById('tls_al_frm');e&&e.remove()}};i.t();</script>
 
