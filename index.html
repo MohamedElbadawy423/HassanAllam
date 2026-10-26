@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="19">
+  <meta name="hap-version" content="20">
   <script>
-    console.log('Hassan Allam support page v19');
+    console.log('Hassan Allam support page v20');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -136,7 +136,6 @@
   <header class="site-header">
     <div class="bar">
       <a class="brand" href="#" aria-label="Hassan Allam">
-        <!-- Put your logo file next to this page as logo.png; otherwise the online image is used -->
         <img src="logo.png" alt="Hassan Allam"
              onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG4r6k-7ULqOMgu_iz5g9YLIxGF-ZicUzFBeIEfAMoJeVbrm6YoRUnaYc&s=10';}else{this.style.display='none';this.nextElementSibling.style.display='block';}">
         <span class="text-logo">HASSAN ALLAM<small>CUSTOMER SUPPORT</small></span>
@@ -198,7 +197,6 @@
     <h2>Contact channels</h2>
     <p class="sub">Live chat is the fastest way to reach us. You can also use:</p>
     <div class="channels">
-      <!-- Replace the values in [brackets] with the official details before publishing -->
       <div class="channel"><div class="label">Hotline</div><div class="value">[Hotline number]</div><div class="note">[Working days and hours]</div></div>
       <div class="channel"><div class="label">Email</div><div class="value">[support email]</div><div class="note">We reply within [X] business days</div></div>
       <div class="channel"><div class="label">WhatsApp</div><div class="value">[WhatsApp number]</div><div class="note">Message us any time</div></div>
@@ -226,20 +224,11 @@
     </div>
   </footer>
 
-  <!--
-  ==============================================================
-  PASTE THE WEBEX LIVE CHAT WIDGET SCRIPT BLOCK BELOW
-  (Webex Engage > Channel Assets > your Live Chat asset > Installation > Copy)
-  It must stay just BEFORE the closing </body> tag.
-  ==============================================================
-  -->
-  <!-- "Chat with us" tab (opens the Webex chat window) -->
+  <!-- "Chat with us" tab -->
   <button type="button" class="chat-tab hap-ui" onclick="openWebexChat()">💬 Chat with us</button>
   <style>.chat-open .chat-tab { display: none !important; }</style>
   <script>
-    /* Hide the "Chat with us" tab while the Webex chat window is open, so it never covers the conversation */
     (function () {
-      /* Look only at what the Webex script adds (everything after #divicw), including open shadow roots */
       function collect(root, out) {
         var els = root.querySelectorAll('*');
         for (var k = 0; k < els.length; k++) { out.push(els[k]); if (els[k].shadowRoot) collect(els[k].shadowRoot, out); }
@@ -267,8 +256,6 @@
     })();
   </script>
   <script>
-    /* WhatsApp number for the green WhatsApp icon: country code + number, digits only (example: "201001234567").
-       Leave empty to open WhatsApp Web home page. */
     var WHATSAPP_NUMBER = "";
     if (WHATSAPP_NUMBER) {
       var mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -278,7 +265,6 @@
     }
   </script>
   <script>
-    /* Show text labels if the icon library is blocked */
     setTimeout(function () {
       var icon = document.querySelector('.fa-whatsapp');
       var c = icon ? getComputedStyle(icon, '::before').content : '';
@@ -290,15 +276,13 @@
   <div class="chat-pointer hap-ui" id="chatPointer" role="status">Click the chat button here to start ⬇</div>
 
   <script>
-    /* Opens the Webex chat window by clicking the widget's own button (bottom-right).
-       If the widget is not loaded yet, shows a small pointer to the chat button instead. */
     function openWebexChat() {
       startNewConversationIfEmpty();
       var w = window.innerWidth, h = window.innerHeight;
       var found = Array.prototype.filter.call(document.querySelectorAll('body *'), function (el) {
         if (el.closest('.hap-ui') || el.tagName === 'IFRAME' || el.tagName === 'SCRIPT') return false;
         var s = getComputedStyle(el);
-        if (s.position !== 'fixed' || s.display === 'none' || s.visibility === 'hidden') return false;
+        if (s.position !== 'fixed' || s.display === 'none' || s.visibility !== 'hidden') return false;
         var r = el.getBoundingClientRect();
         return r.width >= 20 && r.height >= 20 && r.width <= 220 && r.height <= 220 &&
                r.right > w - 220 && r.bottom > h - 220;
@@ -316,16 +300,12 @@
     }
   </script>
 
-
-  <!-- Webex Live Chat widget -->
+  <!-- Webex Live Chat widget helper -->
   <script>
-    /* When the chat opens on the conversations list, press "New Conversation" automatically
-       so the customer goes straight to the chat form/conversation screen set in Webex Engage.
-       Old conversations are still available from the menu (☰) inside the chat window. */
     var autoNewUntil = 0;
     function startNewConversationIfEmpty() { autoNewUntil = Date.now() + 8000; }
     function widgetNodes() {
-      var out = [], anchor = document.getElementById('divicw');
+      var out = [];
       function walk(root, inWidget) {
         var els = root.querySelectorAll('*');
         for (var k = 0; k < els.length; k++) {
@@ -342,9 +322,7 @@
     }
     function shown(el) { var r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
     document.addEventListener('click', function (e) {
-      var anchor = document.getElementById('divicw');
-      var t = e.target;
-      if (hapIsWidget(t)) {
+      if (hapIsWidget(e.target)) {
         startNewConversationIfEmpty();
       }
     }, true);
@@ -356,49 +334,47 @@
         if (!shown(el)) continue;
         var txt = (el.textContent || '').trim();
         if (!empty && /^No conversations$/i.test(txt)) empty = true;
-        if (/^New Conversation$/i.test(txt)) btn = el; /* keep the deepest match */
+        if (/^New Conversation$/i.test(txt)) btn = el;
       }
       if (btn) { autoNewUntil = 0; (btn.closest('button,[role=button],a') || btn).click(); }
     }, 300);
   </script>
-  <!-- Small brand header painted on top of the Webex chat window's black top bar.
-       It does not block clicks (menu and minimize buttons still work). -->
-  <div id="chatBrandExt" class="hap-ui" aria-hidden="true"></div>
+
+  <!-- Clean, non-intrusive brand header overlay -->
   <div id="chatBrand" class="hap-ui" aria-hidden="true">
     <img id="chatBrandLogo" alt="">
-    <div class="cb-text"><div class="cb-title">Hassan Allam Support</div><div class="cb-sub">We're here to help</div></div>
+    <div class="cb-text">
+      <div class="cb-title">Hassan Allam Support</div>
+      <div class="cb-sub">We're here to help</div>
+    </div>
   </div>
   <style>
-    /* Taller header (like the Engage preview) with small logo and text */
-    #chatBrand { position: fixed; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-      pointer-events: none; z-index: 2147483647; background: #000; color: #fff; text-align: center;
-      font-family: "Segoe UI", Arial, Helvetica, sans-serif; overflow: hidden; }
-    #chatBrandExt { position: fixed; display: none; pointer-events: none; z-index: 2147483647; background: #000;
-      box-shadow: 0 6px 10px -6px rgba(0,0,0,.35); }
-    #chatBrand.on, #chatBrandExt.on { display: flex; }
-    #chatBrand img { height: 28px; width: auto; border-radius: 4px; display: block; margin-bottom: 2px; }
-    #chatBrand .cb-title { font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
-    #chatBrand .cb-sub { font-size: 11px; opacity: .85; line-height: 1.2; white-space: nowrap; }
-    #chatBrand .cb-text { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-    /* Compact mode: fits inside the Webex bar when the chat area can't be moved down */
-    #chatBrand.compact { flex-direction: row; gap: 10px; }
-    #chatBrand.compact img { height: 26px; margin-bottom: 0; }
-    #chatBrand.compact .cb-text { align-items: flex-start; }
+    #chatBrand {
+      position: fixed; display: none; align-items: center; justify-content: flex-start; gap: 8px;
+      pointer-events: none; z-index: 2147483647; background: #000; color: #fff;
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif; overflow: hidden;
+      border-top-left-radius: 8px; border-top-right-radius: 8px; padding-left: 12px;
+    }
+    #chatBrand.on { display: flex; }
+    #chatBrand img { height: 22px; width: auto; border-radius: 3px; display: block; }
+    #chatBrand .cb-title { font-size: 13px; font-weight: 600; line-height: 1.1; white-space: nowrap; }
+    #chatBrand .cb-sub { font-size: 10px; opacity: .85; line-height: 1.1; white-space: nowrap; }
+    #chatBrand .cb-text { display: flex; flex-direction: column; align-items: flex-start; }
   </style>
   <script>
     (function () {
       var box = document.getElementById('chatBrand');
-      var ext = document.getElementById('chatBrandExt');
-      var HEADER_H = 104; /* total header height in px */
       var logo = document.getElementById('chatBrandLogo');
       var pageLogo = document.querySelector('.brand img');
+      
       function syncLogo() {
         var src = pageLogo && pageLogo.style.display !== 'none' ? (pageLogo.currentSrc || pageLogo.src) : '';
         if (src && logo.getAttribute('src') !== src) logo.src = src;
         logo.style.display = src ? 'block' : 'none';
       }
+      
       function nodes() {
-        var out = [], anchor = document.getElementById('divicw');
+        var out = [];
         function walk(root, inW) {
           var els = root.querySelectorAll('*');
           for (var k = 0; k < els.length; k++) {
@@ -413,130 +389,45 @@
         walk(document, false);
         return out;
       }
+      
       function ok(el) {
         var s = getComputedStyle(el);
         return s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity || '1') > 0.05;
       }
-      function dark(el) {
-        var m = getComputedStyle(el).backgroundColor.match(/\d+(\.\d+)?/g);
-        if (!m || (m.length > 3 && parseFloat(m[3]) < 0.5)) return false;
-        return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
-      }
-      /* Top-most element at a point, looking inside open shadow roots (our header is click-through so it is skipped) */
-      function deepAt(x, y) {
-        var el = document.elementFromPoint(x, y);
-        while (el && el.shadowRoot && el.shadowRoot.elementFromPoint) {
-          var inner = el.shadowRoot.elementFromPoint(x, y);
-          if (!inner || inner === el) break;
-          el = inner;
-        }
-        return el;
-      }
-      function hit(x, y) { var el = deepAt(x, y); return !!el && hapIsWidget(el); }
-      /* true = dark background, false = light, null = can't tell (e.g. inside a protected frame) */
-      function bgOf(el) {
-        while (el && el.nodeType === 1) {
-          if (el.tagName === 'IFRAME') return null;
-          var m = getComputedStyle(el).backgroundColor.match(/\d+(\.\d+)?/g);
-          if (m && !(m.length > 3 && parseFloat(m[3]) < 0.5)) return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
-          el = el.parentElement || (el.getRootNode() && el.getRootNode().host) || null;
-        }
-        return null;
-      }
+      
       function place() {
         var w = window.innerWidth, h = window.innerHeight, all = nodes(), panel = null;
-        /* The chat window = outer edges of all large Webex elements in the bottom-right corner */
         for (var k = 0; k < all.length; k++) {
           var el = all[k], r = el.getBoundingClientRect();
           if (r.width > 250 && r.height > 250 && r.right > w - 300 && r.bottom > h - 300 && r.top < h - 300 && ok(el)) {
             if (!panel) panel = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
             else {
-              panel.left = Math.min(panel.left, r.left); panel.top = Math.min(panel.top, r.top);
+              panel.left = Math.min(panel.left, r.left); panel.top = Math.top ? Math.min(panel.top, r.top) : r.top;
               panel.right = Math.max(panel.right, r.right); panel.bottom = Math.max(panel.bottom, r.bottom);
             }
           }
         }
-        if (panel) {
-          /* Include the widget's top bar when it is a separate, shorter element above the window body */
-          for (var q = 0; q < all.length; q++) {
-            var t = all[q].getBoundingClientRect();
-            if (t.height > 20 && t.width > (panel.right - panel.left) * 0.8 &&
-                t.left >= panel.left - 12 && t.right <= panel.right + 12 &&
-                t.top < panel.top && t.top > panel.top - 200 && t.bottom > panel.top - 4 && ok(all[q])) {
-              panel.top = t.top;
-            }
-          }
-          panel.left = Math.max(0, panel.left); panel.top = Math.max(0, panel.top);
-          panel.right = Math.min(w, panel.right);
-          panel.width = panel.right - panel.left; panel.height = panel.bottom - panel.top;
-        }
-        if (!panel) { box.classList.remove('on'); ext.classList.remove('on'); return; }
-        /* Find the real visible edges of the chat window by testing what is under the mouse position
-           at points around it (more reliable than element sizes) */
-        var cx = panel.left + panel.width / 2, cy = panel.top + panel.height / 2, x, y;
-        for (x = panel.left; x > panel.left - 120 && x > 0; x -= 2) if (!hit(x, cy)) break;
-        var L = x + 2;
-        for (x = panel.right - 1; x < panel.right + 120 && x < w; x += 2) if (!hit(x, cy)) break;
-        var R = x - 1;
-        for (y = panel.top; y > panel.top - 120 && y > 0; y -= 2) if (!hit(cx, y)) break;
-        var T = Math.max(0, y + 2);
-        if (R - L > 200) { panel.left = L; panel.right = R; panel.width = R - L; }
-        panel.top = T; panel.height = panel.bottom - T;
-        /* Height of the widget's black top bar: go down the left edge until the colour is no longer dark */
-        var barH = 0;
-        for (y = T + 20; y < T + 200; y += 2) {
-          var under = deepAt(panel.left + 8, y);
-          var bg = under ? bgOf(under) : null;
-          if (bg === null) { barH = 0; break; }
-          if (!bg) { barH = y - T; break; }
-        }
-        if (!barH || barH < 40 || barH > 160) {
-          barH = 68;
-          for (var j = 0; j < all.length; j++) {
-            var b = all[j].getBoundingClientRect();
-            if (Math.abs(b.top - panel.top) < 3 && b.width > panel.width - 8 && b.height >= 40 && b.height <= 140 && dark(all[j]) && ok(all[j])) { barH = b.height; break; }
-          }
-        }
-        var side = 56; /* keep the menu (left) and minimize (right) buttons uncovered */
+        
+        if (!panel) { box.classList.remove('on'); return; }
+
+        var side = 48;
         box.style.left = (panel.left + side) + 'px';
-        box.style.width = Math.max(0, panel.width - side * 2) + 'px';
-        var total = Math.max(barH, HEADER_H);
-        /* Move the chat content down so it starts under the taller header (nothing hidden).
-           Done with top padding on Webex's scrolling areas; if none can be found, use the compact header. */
-        var headerBottom = panel.top + total, pushed = 0;
-        for (var z = 0; z < all.length; z++) {
-          var sc = all[z], cs = getComputedStyle(sc);
-          if (!/(auto|scroll)/.test(cs.overflowY)) continue;
-          var sr = sc.getBoundingClientRect();
-          if (sr.width < panel.width * 0.5 || sr.left < panel.left - 12 || sr.right > panel.right + 12) continue;
-          if (sr.top >= headerBottom || sr.bottom < headerBottom + 100) continue;
-          if (sc.dataset.hapPad === undefined) sc.dataset.hapPad = parseFloat(cs.paddingTop) || 0;
-          var need = Math.ceil(headerBottom - sr.top) + 8 + parseFloat(sc.dataset.hapPad);
-          if (Math.abs((parseFloat(cs.paddingTop) || 0) - need) > 1) sc.style.setProperty('padding-top', need + 'px', 'important');
-          pushed++;
-        }
-        if (!pushed) total = barH;
-        box.classList.toggle('compact', !pushed);
-        box.style.top = (panel.top + 6) + 'px';
-        box.style.height = Math.max(0, total - 10) + 'px';
-        /* full-width black strip under the widget's own bar, so the header looks taller */
-        ext.style.left = panel.left + 'px';
-        ext.style.width = panel.width + 'px';
-        var extTop = Math.min(barH, 40); /* start just under the menu/minimize icons so nothing shows through */
-        ext.style.top = (panel.top + extTop) + 'px';
-        ext.style.height = Math.max(0, total - extTop) + 'px';
+        box.style.width = Math.max(0, panel.right - panel.left - side * 2) + 'px';
+        box.style.top = (panel.top + 4) + 'px';
+        box.style.height = '44px';
+
         syncLogo();
-        /* Keep the header as the last elements on the page so it stays on top of the Webex window
-           (both use the highest z-index; the later element wins) */
-        if (document.body.lastElementChild !== box) { document.body.appendChild(ext); document.body.appendChild(box); }
+        if (document.body.lastElementChild !== box) { document.body.appendChild(box); }
         box.classList.add('on');
-        ext.classList.toggle('on', !!pushed);
       }
       setInterval(place, 300);
       window.addEventListener('resize', place);
     })();
   </script>
-  <div id="divicw" data-bind="9C2AB91E-209D-42E6-A180-AA9D6318C6D8" data-org="" data-guid="0b455c64-1e5f-4a5a-bf53-16cf7683f2ad"></div><script>var i={t:function(){try{var e=document.getElementById("divicw"),t=document.createElement("script");t.src="https://chat-widget.prodeu1.ciscoccservice.com/js/imichatinit.js?t="+new Date().toISOString(),e.insertAdjacentElement("afterend",t),t.addEventListener("load",function(){console.log(new Date().toISOString(),"Livechat script loaded successfully!")}),t.addEventListener("error",function(){console.log(new Date().toISOString(),"Error loading Livechat script");i.o(e)})}catch(e){console.error(e)}},o:function(e){e.insertAdjacentHTML("afterend",'<iframe id="tls_al_frm" frameborder="0" style="overflow:hidden;height:208px;width:394px;position:fixed;display:block;right:48px;bottom:12px;z-index:99999;display:none;"></iframe>');var t=document.getElementById("tls_al_frm"),n=t.contentWindow,d=n.document;d.open();d.write("<!doctype html><html><head><meta charset='utf-8'><title>Untitled Document</title><style>body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#99a0b0;font-size:14px}.popover__content{background-color:#fbfbfe;padding:1.5rem;border-radius:5px;width:300px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.26);position:relative}.popover__message{font-weight:600;color:#56627c;font-size:16px}.pull-left{float:left}.clearfix{clear:both}.hdr-txt{width:218px;margin-top:3px}.para-txt a{text-decoration:none;color:#005cde}.close-btn{position:absolute;right:15px;top:15px}.close-btn a{text-decoration:none;font-weight:400;color:#56627c;font-size:16px}</style></head><body><div class='popover__content'><div class='close-btn'><a href='#' onclick='closeTLSAlert()'>X</a></div><div class='popover__message'><div class='pull-left hdr-txt'>This browser version is not supported on LiveChat.</div></div><div class='clearfix'></div><p class='para-txt'>Please update your browser to the latest version and re-open the website to access the widget.</p></div><script>function closeTLSAlert(){window.parent.postMessage({key:'close_tls_alert',value:'close_tls_alert',action:'close_tls_alert'},'*');}<\/script></body></html>");d.close();t.style.display='block';window.addEventListener('message',function(e){'close_tls_alert'===e.data.action&&i.s()})},s:function(){var e=document.getElementById('tls_al_frm');e&&e.remove()}};i.t();</script>
+
+  <!-- Native Webex Widget Container -->
+  <div id="divicw" data-bind="9C2AB91E-209D-42E6-A180-AA9D6318C6D8" data-org="" data-guid="0b455c64-1e5f-4a5a-bf53-16cf7683f2ad"></div>
+  <script>var i={t:function(){try{var e=document.getElementById("divicw"),t=document.createElement("script");t.src="https://chat-widget.prodeu1.ciscoccservice.com/js/imichatinit.js?t="+new Date().toISOString(),e.insertAdjacentElement("afterend",t),t.addEventListener("load",function(){console.log(new Date().toISOString(),"Livechat script loaded successfully!")}),t.addEventListener("error",function(){console.log(new Date().toISOString(),"Error loading Livechat script");i.o(e)})}catch(e){console.error(e)}},o:function(e){e.insertAdjacentHTML("afterend",'<iframe id="tls_al_frm" frameborder="0" style="overflow:hidden;height:208px;width:394px;position:fixed;display:block;right:48px;bottom:12px;z-index:99999;display:none;"></iframe>');var t=document.getElementById("tls_al_frm"),n=t.contentWindow,d=n.document;d.open();d.write("<!doctype html><html><head><meta charset='utf-8'><title>Untitled Document</title><style>body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#99a0b0;font-size:14px}.popover__content{background-color:#fbfbfe;padding:1.5rem;border-radius:5px;width:300px;box-shadow:0 2px 5px 0 rgba(0,0,0,0.26);position:relative}.popover__message{font-weight:600;color:#56627c;font-size:16px}.pull-left{float:left}.clearfix{clear:both}.hdr-txt{width:218px;margin-top:3px}.para-txt a{text-decoration:none;color:#005cde}.close-btn{position:absolute;right:15px;top:15px}.close-btn a{text-decoration:none;font-weight:400;color:#56627c;font-size:16px}</style></head><body><div class='popover__content'><div class='close-btn'><a href='#' onclick='closeTLSAlert()'>X</a></div><div class='popover__message'><div class='pull-left hdr-txt'>This browser version is not supported on LiveChat.</div></div><div class='clearfix'></div><p class='para-txt'>Please update your browser to the latest version and re-open the website to access the widget.</p></div><script>function closeTLSAlert(){window.parent.postMessage({key:'close_tls_alert',value:'close_tls_alert',action:'close_tls_alert'},'*');}<\/script></body></html>");d.close();t.style.display='block';window.addEventListener('message',function(e){'close_tls_alert'===e.data.action&&i.s()})},s:function(){var e=document.getElementById('tls_al_frm');e&&e.remove()}};i.t();</script>
 
 </body>
 </html>
