@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="16">
+  <meta name="hap-version" content="18">
   <script>
-    console.log('Hassan Allam support page v16');
+    console.log('Hassan Allam support page v18');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -366,8 +366,7 @@
   <div id="chatBrandExt" class="hap-ui" aria-hidden="true"></div>
   <div id="chatBrand" class="hap-ui" aria-hidden="true">
     <img id="chatBrandLogo" alt="">
-    <div class="cb-title">Hassan Allam Support</div>
-    <div class="cb-sub">We're here to help</div>
+    <div class="cb-text"><div class="cb-title">Hassan Allam Support</div><div class="cb-sub">We're here to help</div></div>
   </div>
   <style>
     /* Taller header (like the Engage preview) with small logo and text */
@@ -380,6 +379,11 @@
     #chatBrand img { height: 28px; width: auto; border-radius: 4px; display: block; margin-bottom: 2px; }
     #chatBrand .cb-title { font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
     #chatBrand .cb-sub { font-size: 11px; opacity: .85; line-height: 1.2; white-space: nowrap; }
+    #chatBrand .cb-text { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    /* Compact mode: fits inside the Webex bar when the chat area can't be moved down */
+    #chatBrand.compact { flex-direction: row; gap: 10px; }
+    #chatBrand.compact img { height: 26px; margin-bottom: 0; }
+    #chatBrand.compact .cb-text { align-items: flex-start; }
   </style>
   <script>
     (function () {
@@ -456,12 +460,28 @@
         box.style.left = (panel.left + side) + 'px';
         box.style.width = Math.max(0, panel.width - side * 2) + 'px';
         var total = Math.max(barH, HEADER_H);
+        /* Move the chat content down so it starts under the taller header (nothing hidden).
+           Done with top padding on Webex's scrolling areas; if none can be found, use the compact header. */
+        var headerBottom = panel.top + total, pushed = 0;
+        for (var z = 0; z < all.length; z++) {
+          var sc = all[z], cs = getComputedStyle(sc);
+          if (!/(auto|scroll)/.test(cs.overflowY)) continue;
+          var sr = sc.getBoundingClientRect();
+          if (sr.width < panel.width * 0.5 || sr.left < panel.left - 12 || sr.right > panel.right + 12) continue;
+          if (sr.top >= headerBottom || sr.bottom < headerBottom + 100) continue;
+          if (sc.dataset.hapPad === undefined) sc.dataset.hapPad = parseFloat(cs.paddingTop) || 0;
+          var need = Math.ceil(headerBottom - sr.top) + 8 + parseFloat(sc.dataset.hapPad);
+          if (Math.abs((parseFloat(cs.paddingTop) || 0) - need) > 1) sc.style.setProperty('padding-top', need + 'px', 'important');
+          pushed++;
+        }
+        if (!pushed) total = barH;
+        box.classList.toggle('compact', !pushed);
         box.style.top = (panel.top + 6) + 'px';
         box.style.height = Math.max(0, total - 10) + 'px';
         /* full-width black strip under the widget's own bar, so the header looks taller */
         ext.style.left = panel.left + 'px';
         ext.style.width = panel.width + 'px';
-        var extTop = Math.min(barH, 56); /* start just under the menu/minimize icons so nothing shows through */
+        var extTop = 36; /* start just under the menu/minimize icons so nothing shows through */
         ext.style.top = (panel.top + extTop) + 'px';
         ext.style.height = Math.max(0, total - extTop) + 'px';
         syncLogo();
@@ -469,7 +489,7 @@
            (both use the highest z-index; the later element wins) */
         if (document.body.lastElementChild !== box) { document.body.appendChild(ext); document.body.appendChild(box); }
         box.classList.add('on');
-        ext.classList.add('on');
+        ext.classList.toggle('on', !!pushed);
       }
       setInterval(place, 300);
       window.addEventListener('resize', place);
