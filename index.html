@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="18">
+  <meta name="hap-version" content="19">
   <script>
-    console.log('Hassan Allam support page v18');
+    console.log('Hassan Allam support page v19');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -422,6 +422,27 @@
         if (!m || (m.length > 3 && parseFloat(m[3]) < 0.5)) return false;
         return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
       }
+      /* Top-most element at a point, looking inside open shadow roots (our header is click-through so it is skipped) */
+      function deepAt(x, y) {
+        var el = document.elementFromPoint(x, y);
+        while (el && el.shadowRoot && el.shadowRoot.elementFromPoint) {
+          var inner = el.shadowRoot.elementFromPoint(x, y);
+          if (!inner || inner === el) break;
+          el = inner;
+        }
+        return el;
+      }
+      function hit(x, y) { var el = deepAt(x, y); return !!el && hapIsWidget(el); }
+      /* true = dark background, false = light, null = can't tell (e.g. inside a protected frame) */
+      function bgOf(el) {
+        while (el && el.nodeType === 1) {
+          if (el.tagName === 'IFRAME') return null;
+          var m = getComputedStyle(el).backgroundColor.match(/\d+(\.\d+)?/g);
+          if (m && !(m.length > 3 && parseFloat(m[3]) < 0.5)) return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
+          el = el.parentElement || (el.getRootNode() && el.getRootNode().host) || null;
+        }
+        return null;
+      }
       function place() {
         var w = window.innerWidth, h = window.innerHeight, all = nodes(), panel = null;
         /* The chat window = outer edges of all large Webex elements in the bottom-right corner */
@@ -450,11 +471,31 @@
           panel.width = panel.right - panel.left; panel.height = panel.bottom - panel.top;
         }
         if (!panel) { box.classList.remove('on'); ext.classList.remove('on'); return; }
-        /* Height of the widget's top bar (falls back to 64px) */
-        var barH = 68;
-        for (var j = 0; j < all.length; j++) {
-          var b = all[j].getBoundingClientRect();
-          if (Math.abs(b.top - panel.top) < 3 && b.width > panel.width - 8 && b.height >= 40 && b.height <= 140 && dark(all[j]) && ok(all[j])) { barH = b.height; break; }
+        /* Find the real visible edges of the chat window by testing what is under the mouse position
+           at points around it (more reliable than element sizes) */
+        var cx = panel.left + panel.width / 2, cy = panel.top + panel.height / 2, x, y;
+        for (x = panel.left; x > panel.left - 120 && x > 0; x -= 2) if (!hit(x, cy)) break;
+        var L = x + 2;
+        for (x = panel.right - 1; x < panel.right + 120 && x < w; x += 2) if (!hit(x, cy)) break;
+        var R = x - 1;
+        for (y = panel.top; y > panel.top - 120 && y > 0; y -= 2) if (!hit(cx, y)) break;
+        var T = Math.max(0, y + 2);
+        if (R - L > 200) { panel.left = L; panel.right = R; panel.width = R - L; }
+        panel.top = T; panel.height = panel.bottom - T;
+        /* Height of the widget's black top bar: go down the left edge until the colour is no longer dark */
+        var barH = 0;
+        for (y = T + 20; y < T + 200; y += 2) {
+          var under = deepAt(panel.left + 8, y);
+          var bg = under ? bgOf(under) : null;
+          if (bg === null) { barH = 0; break; }
+          if (!bg) { barH = y - T; break; }
+        }
+        if (!barH || barH < 40 || barH > 160) {
+          barH = 68;
+          for (var j = 0; j < all.length; j++) {
+            var b = all[j].getBoundingClientRect();
+            if (Math.abs(b.top - panel.top) < 3 && b.width > panel.width - 8 && b.height >= 40 && b.height <= 140 && dark(all[j]) && ok(all[j])) { barH = b.height; break; }
+          }
         }
         var side = 56; /* keep the menu (left) and minimize (right) buttons uncovered */
         box.style.left = (panel.left + side) + 'px';
@@ -481,7 +522,7 @@
         /* full-width black strip under the widget's own bar, so the header looks taller */
         ext.style.left = panel.left + 'px';
         ext.style.width = panel.width + 'px';
-        var extTop = 36; /* start just under the menu/minimize icons so nothing shows through */
+        var extTop = Math.min(barH, 40); /* start just under the menu/minimize icons so nothing shows through */
         ext.style.top = (panel.top + extTop) + 'px';
         ext.style.height = Math.max(0, total - extTop) + 'px';
         syncLogo();
