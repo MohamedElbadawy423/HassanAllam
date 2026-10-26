@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="19">
+  <meta name="hap-version" content="22">
   <script>
-    console.log('Hassan Allam support page v19');
+    console.log('Hassan Allam support page v22');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -381,8 +381,10 @@
     #chatBrand .cb-sub { font-size: 11px; opacity: .85; line-height: 1.2; white-space: nowrap; }
     #chatBrand .cb-text { display: flex; flex-direction: column; align-items: center; gap: 2px; }
     /* Compact mode: fits inside the Webex bar when the chat area can't be moved down */
-    #chatBrand.compact { flex-direction: row; gap: 10px; }
-    #chatBrand.compact img { height: 26px; margin-bottom: 0; }
+    #chatBrand.compact { flex-direction: row; gap: 8px; }
+    #chatBrand.compact img { height: 22px; margin-bottom: 0; }
+    #chatBrand.compact .cb-title { font-size: 13px; }
+    #chatBrand.compact .cb-sub { font-size: 10px; }
     #chatBrand.compact .cb-text { align-items: flex-start; }
   </style>
   <script>
@@ -490,6 +492,7 @@
           if (bg === null) { barH = 0; break; }
           if (!bg) { barH = y - T; break; }
         }
+        if (barH > 80) barH = 68; /* a measured bar taller than this is a mis-read: use the usual Webex bar height */
         if (!barH || barH < 40 || barH > 160) {
           barH = 68;
           for (var j = 0; j < all.length; j++) {
@@ -517,8 +520,15 @@
         }
         if (!pushed) total = barH;
         box.classList.toggle('compact', !pushed);
-        box.style.top = (panel.top + 6) + 'px';
-        box.style.height = Math.max(0, total - 10) + 'px';
+        if (pushed) {
+          box.style.top = (panel.top + 6) + 'px';
+          box.style.height = Math.max(0, total - 10) + 'px';
+        } else {
+          /* compact: stay fully inside the Webex black bar */
+          var ch = Math.min(46, barH - 14);
+          box.style.top = (panel.top + Math.round((barH - ch) / 2)) + 'px';
+          box.style.height = ch + 'px';
+        }
         /* full-width black strip under the widget's own bar, so the header looks taller */
         ext.style.left = panel.left + 'px';
         ext.style.width = panel.width + 'px';
