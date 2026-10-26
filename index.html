@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="15">
+  <meta name="hap-version" content="16">
   <script>
-    console.log('Hassan Allam support page v15');
+    console.log('Hassan Allam support page v16');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -29,6 +29,7 @@
     }
     .site-header, .site-header *, .hero, .hero *, section.block, section.block *, .site-footer, .site-footer *, .hap-ui { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); }
+    html, body { overflow-x: hidden; } /* stop the page from shifting sideways when the chat window opens */
     /* Page text styles are applied to the page sections only, so the Webex chat widget keeps its own look */
     .site-header, .hero, section.block, .site-footer { font-family: "Segoe UI", Arial, Helvetica, sans-serif; color: var(--ink); }
     .site-header a, .hero a, section.block a, .site-footer a { color: inherit; }
@@ -431,6 +432,15 @@
           }
         }
         if (panel) {
+          /* Include the widget's top bar when it is a separate, shorter element above the window body */
+          for (var q = 0; q < all.length; q++) {
+            var t = all[q].getBoundingClientRect();
+            if (t.height > 20 && t.width > (panel.right - panel.left) * 0.8 &&
+                t.left >= panel.left - 12 && t.right <= panel.right + 12 &&
+                t.top < panel.top && t.top > panel.top - 200 && t.bottom > panel.top - 4 && ok(all[q])) {
+              panel.top = t.top;
+            }
+          }
           panel.left = Math.max(0, panel.left); panel.top = Math.max(0, panel.top);
           panel.right = Math.min(w, panel.right);
           panel.width = panel.right - panel.left; panel.height = panel.bottom - panel.top;
