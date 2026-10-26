@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | Hassan Allam</title>
-  <meta name="hap-version" content="14">
+  <meta name="hap-version" content="15">
   <script>
-    console.log('Hassan Allam support page v14');
+    console.log('Hassan Allam support page v15');
     /* true for anything the Webex chat script adds to the page (wherever it adds it) */
     function hapIsWidget(el) {
       if (!el || el.nodeType !== 1) return false;
@@ -418,12 +418,22 @@
         return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
       }
       function place() {
-        var w = window.innerWidth, h = window.innerHeight, all = nodes(), panel = null, area = 0;
+        var w = window.innerWidth, h = window.innerHeight, all = nodes(), panel = null;
+        /* The chat window = outer edges of all large Webex elements in the bottom-right corner */
         for (var k = 0; k < all.length; k++) {
           var el = all[k], r = el.getBoundingClientRect();
           if (r.width > 250 && r.height > 250 && r.right > w - 300 && r.bottom > h - 300 && r.top < h - 300 && ok(el)) {
-            if (r.width * r.height > area) { area = r.width * r.height; panel = r; }
+            if (!panel) panel = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+            else {
+              panel.left = Math.min(panel.left, r.left); panel.top = Math.min(panel.top, r.top);
+              panel.right = Math.max(panel.right, r.right); panel.bottom = Math.max(panel.bottom, r.bottom);
+            }
           }
+        }
+        if (panel) {
+          panel.left = Math.max(0, panel.left); panel.top = Math.max(0, panel.top);
+          panel.right = Math.min(w, panel.right);
+          panel.width = panel.right - panel.left; panel.height = panel.bottom - panel.top;
         }
         if (!panel) { box.classList.remove('on'); ext.classList.remove('on'); return; }
         /* Height of the widget's top bar (falls back to 64px) */
@@ -441,14 +451,15 @@
         /* full-width black strip under the widget's own bar, so the header looks taller */
         ext.style.left = panel.left + 'px';
         ext.style.width = panel.width + 'px';
-        ext.style.top = (panel.top + barH) + 'px';
-        ext.style.height = Math.max(0, total - barH) + 'px';
+        var extTop = Math.min(barH, 56); /* start just under the menu/minimize icons so nothing shows through */
+        ext.style.top = (panel.top + extTop) + 'px';
+        ext.style.height = Math.max(0, total - extTop) + 'px';
         syncLogo();
         /* Keep the header as the last elements on the page so it stays on top of the Webex window
            (both use the highest z-index; the later element wins) */
         if (document.body.lastElementChild !== box) { document.body.appendChild(ext); document.body.appendChild(box); }
         box.classList.add('on');
-        ext.classList.toggle('on', total > barH);
+        ext.classList.add('on');
       }
       setInterval(place, 300);
       window.addEventListener('resize', place);
