@@ -136,7 +136,6 @@
   <header class="site-header">
     <div class="bar">
       <a class="brand" href="#" aria-label="Hassan Allam">
-        <!-- Put your logo file next to this page as logo.png; otherwise the online image is used -->
         <img src="logo.png" alt="Hassan Allam"
              onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG4r6k-7ULqOMgu_iz5g9YLIxGF-ZicUzFBeIEfAMoJeVbrm6YoRUnaYc&s=10';}else{this.style.display='none';this.nextElementSibling.style.display='block';}">
         <span class="text-logo">HASSAN ALLAM<small>CUSTOMER SUPPORT</small></span>
@@ -157,7 +156,7 @@
         <p class="ar">مرحبًا بكم في خدمة عملاء حسن علام</p>
         <p class="lead">Our customer service team is here to answer your questions about projects, units, payments and more. Chat with us directly from this page.</p>
         <div class="cta">
-          <a class="btn whatsapp icon-btn" id="waLink" href="https://web.whatsapp.com/" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">
+          <a class="btn whatsapp icon-btn" id="waLink" href="https://wa.me/201063523261?text=Hello%21+I+am+interested+in+learning+more+about+your+business" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">
             <i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span class="sr-only">WhatsApp</span>
           </a>
           <a class="btn messenger icon-btn" href="https://www.facebook.com/share/1DiLjDEnJK/" target="_blank" rel="noopener" title="Message us on Messenger" aria-label="Message us on Messenger">
@@ -198,10 +197,9 @@
     <h2>Contact channels</h2>
     <p class="sub">Live chat is the fastest way to reach us. You can also use:</p>
     <div class="channels">
-      <!-- Replace the values in [brackets] with the official details before publishing -->
       <div class="channel"><div class="label">Hotline</div><div class="value">[Hotline number]</div><div class="note">[Working days and hours]</div></div>
       <div class="channel"><div class="label">Email</div><div class="value">[support email]</div><div class="note">We reply within [X] business days</div></div>
-      <div class="channel"><div class="label">WhatsApp</div><div class="value">[WhatsApp number]</div><div class="note">Message us any time</div></div>
+      <div class="channel"><div class="label">WhatsApp</div><div class="value">+20 106 352 3261</div><div class="note">Message us any time</div></div>
       <div class="channel">
         <div class="label">Facebook Messenger</div>
         <div class="value"><a href="https://www.facebook.com/share/1DiLjDEnJK/" target="_blank" rel="noopener">Message us on Messenger</a></div>
@@ -226,20 +224,10 @@
     </div>
   </footer>
 
-  <!--
-  ==============================================================
-  PASTE THE WEBEX LIVE CHAT WIDGET SCRIPT BLOCK BELOW
-  (Webex Engage > Channel Assets > your Live Chat asset > Installation > Copy)
-  It must stay just BEFORE the closing </body> tag.
-  ==============================================================
-  -->
-  <!-- "Chat with us" tab (opens the Webex chat window) -->
   <button type="button" class="chat-tab hap-ui" onclick="openWebexChat()">💬 Chat with us</button>
   <style>.chat-open .chat-tab { display: none !important; }</style>
   <script>
-    /* Hide the "Chat with us" tab while the Webex chat window is open, so it never covers the conversation */
     (function () {
-      /* Look only at what the Webex script adds (everything after #divicw), including open shadow roots */
       function collect(root, out) {
         var els = root.querySelectorAll('*');
         for (var k = 0; k < els.length; k++) { out.push(els[k]); if (els[k].shadowRoot) collect(els[k].shadowRoot, out); }
@@ -266,19 +254,22 @@
       setInterval(check, 400);
     })();
   </script>
+
   <script>
-    /* WhatsApp number for the green WhatsApp icon: country code + number, digits only (example: "201001234567").
-       Leave empty to open WhatsApp Web home page. */
-    var WHATSAPP_NUMBER = "";
+    var WHATSAPP_NUMBER = "201063523261";
+    var WHATSAPP_TEXT = encodeURIComponent("Hello! I am interested in learning more about your business");
     if (WHATSAPP_NUMBER) {
       var mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      document.getElementById('waLink').href = mobile
-        ? 'https://wa.me/' + WHATSAPP_NUMBER
-        : 'https://web.whatsapp.com/send?phone=' + WHATSAPP_NUMBER;
+      var linkEl = document.getElementById('waLink');
+      if (linkEl) {
+        linkEl.href = mobile
+          ? 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + WHATSAPP_TEXT
+          : 'https://web.whatsapp.com/send?phone=' + WHATSAPP_NUMBER + '&text=' + WHATSAPP_TEXT;
+      }
     }
   </script>
+
   <script>
-    /* Show text labels if the icon library is blocked */
     setTimeout(function () {
       var icon = document.querySelector('.fa-whatsapp');
       var c = icon ? getComputedStyle(icon, '::before').content : '';
@@ -287,11 +278,10 @@
       }
     }, 2000);
   </script>
+
   <div class="chat-pointer hap-ui" id="chatPointer" role="status">Click the chat button here to start ⬇</div>
 
   <script>
-    /* Opens the Webex chat window by clicking the widget's own button (bottom-right).
-       If the widget is not loaded yet, shows a small pointer to the chat button instead. */
     function openWebexChat() {
       startNewConversationIfEmpty();
       var w = window.innerWidth, h = window.innerHeight;
@@ -316,12 +306,7 @@
     }
   </script>
 
-
-  <!-- Webex Live Chat widget -->
   <script>
-    /* When the chat opens on the conversations list, press "New Conversation" automatically
-       so the customer goes straight to the chat form/conversation screen set in Webex Engage.
-       Old conversations are still available from the menu (☰) inside the chat window. */
     var autoNewUntil = 0;
     function startNewConversationIfEmpty() { autoNewUntil = Date.now() + 8000; }
     function widgetNodes() {
@@ -356,20 +341,19 @@
         if (!shown(el)) continue;
         var txt = (el.textContent || '').trim();
         if (!empty && /^No conversations$/i.test(txt)) empty = true;
-        if (/^New Conversation$/i.test(txt)) btn = el; /* keep the deepest match */
+        if (/^New Conversation$/i.test(txt)) btn = el;
       }
       if (btn) { autoNewUntil = 0; (btn.closest('button,[role=button],a') || btn).click(); }
     }, 300);
   </script>
-  <!-- Small brand header painted on top of the Webex chat window's black top bar.
-       It does not block clicks (menu and minimize buttons still work). -->
+
   <div id="chatBrandExt" class="hap-ui" aria-hidden="true"></div>
   <div id="chatBrand" class="hap-ui" aria-hidden="true">
     <img id="chatBrandLogo" alt="">
     <div class="cb-text"><div class="cb-title">Hassan Allam Support</div><div class="cb-sub">We're here to help</div></div>
   </div>
+
   <style>
-    /* Taller header (like the Engage preview) with small logo and text */
     #chatBrand { position: fixed; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
       pointer-events: none; z-index: 2147483647; background: #000; color: #fff; text-align: center;
       font-family: "Segoe UI", Arial, Helvetica, sans-serif; overflow: hidden; }
@@ -380,18 +364,18 @@
     #chatBrand .cb-title { font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
     #chatBrand .cb-sub { font-size: 11px; opacity: .85; line-height: 1.2; white-space: nowrap; }
     #chatBrand .cb-text { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-    /* Compact mode: fits inside the Webex bar when the chat area can't be moved down */
     #chatBrand.compact { flex-direction: row; gap: 8px; }
     #chatBrand.compact img { height: 22px; margin-bottom: 0; }
     #chatBrand.compact .cb-title { font-size: 13px; }
     #chatBrand.compact .cb-sub { font-size: 10px; }
     #chatBrand.compact .cb-text { align-items: flex-start; }
   </style>
+
   <script>
     (function () {
       var box = document.getElementById('chatBrand');
       var ext = document.getElementById('chatBrandExt');
-      var HEADER_H = 104; /* total header height in px */
+      var HEADER_H = 104;
       var logo = document.getElementById('chatBrandLogo');
       var pageLogo = document.querySelector('.brand img');
       function syncLogo() {
@@ -424,7 +408,6 @@
         if (!m || (m.length > 3 && parseFloat(m[3]) < 0.5)) return false;
         return (+m[0] * 0.299 + +m[1] * 0.587 + +m[2] * 0.114) < 90;
       }
-      /* Top-most element at a point, looking inside open shadow roots (our header is click-through so it is skipped) */
       function deepAt(x, y) {
         var el = document.elementFromPoint(x, y);
         while (el && el.shadowRoot && el.shadowRoot.elementFromPoint) {
@@ -435,7 +418,6 @@
         return el;
       }
       function hit(x, y) { var el = deepAt(x, y); return !!el && hapIsWidget(el); }
-      /* true = dark background, false = light, null = can't tell (e.g. inside a protected frame) */
       function bgOf(el) {
         while (el && el.nodeType === 1) {
           if (el.tagName === 'IFRAME') return null;
@@ -447,7 +429,6 @@
       }
       function place() {
         var w = window.innerWidth, h = window.innerHeight, all = nodes(), panel = null;
-        /* The chat window = outer edges of all large Webex elements in the bottom-right corner */
         for (var k = 0; k < all.length; k++) {
           var el = all[k], r = el.getBoundingClientRect();
           if (r.width > 250 && r.height > 250 && r.right > w - 300 && r.bottom > h - 300 && r.top < h - 300 && ok(el)) {
@@ -459,7 +440,6 @@
           }
         }
         if (panel) {
-          /* Include the widget's top bar when it is a separate, shorter element above the window body */
           for (var q = 0; q < all.length; q++) {
             var t = all[q].getBoundingClientRect();
             if (t.height > 20 && t.width > (panel.right - panel.left) * 0.8 &&
@@ -473,8 +453,6 @@
           panel.width = panel.right - panel.left; panel.height = panel.bottom - panel.top;
         }
         if (!panel) { box.classList.remove('on'); ext.classList.remove('on'); return; }
-        /* Find the real visible edges of the chat window by testing what is under the mouse position
-           at points around it (more reliable than element sizes) */
         var cx = panel.left + panel.width / 2, cy = panel.top + panel.height / 2, x, y;
         for (x = panel.left; x > panel.left - 120 && x > 0; x -= 2) if (!hit(x, cy)) break;
         var L = x + 2;
@@ -484,7 +462,6 @@
         var T = Math.max(0, y + 2);
         if (R - L > 200) { panel.left = L; panel.right = R; panel.width = R - L; }
         panel.top = T; panel.height = panel.bottom - T;
-        /* Height of the widget's black top bar: go down the left edge until the colour is no longer dark */
         var barH = 0;
         for (y = T + 20; y < T + 200; y += 2) {
           var under = deepAt(panel.left + 8, y);
@@ -492,7 +469,7 @@
           if (bg === null) { barH = 0; break; }
           if (!bg) { barH = y - T; break; }
         }
-        if (barH > 80) barH = 68; /* a measured bar taller than this is a mis-read: use the usual Webex bar height */
+        if (barH > 80) barH = 68;
         if (!barH || barH < 40 || barH > 160) {
           barH = 68;
           for (var j = 0; j < all.length; j++) {
@@ -500,12 +477,10 @@
             if (Math.abs(b.top - panel.top) < 3 && b.width > panel.width - 8 && b.height >= 40 && b.height <= 140 && dark(all[j]) && ok(all[j])) { barH = b.height; break; }
           }
         }
-        var side = 56; /* keep the menu (left) and minimize (right) buttons uncovered */
+        var side = 56;
         box.style.left = (panel.left + side) + 'px';
         box.style.width = Math.max(0, panel.width - side * 2) + 'px';
         var total = Math.max(barH, HEADER_H);
-        /* Move the chat content down so it starts under the taller header (nothing hidden).
-           Done with top padding on Webex's scrolling areas; if none can be found, use the compact header. */
         var headerBottom = panel.top + total, pushed = 0;
         for (var z = 0; z < all.length; z++) {
           var sc = all[z], cs = getComputedStyle(sc);
@@ -524,20 +499,16 @@
           box.style.top = (panel.top + 6) + 'px';
           box.style.height = Math.max(0, total - 10) + 'px';
         } else {
-          /* compact: stay fully inside the Webex black bar */
           var ch = Math.min(46, barH - 14);
           box.style.top = (panel.top + Math.round((barH - ch) / 2)) + 'px';
           box.style.height = ch + 'px';
         }
-        /* full-width black strip under the widget's own bar, so the header looks taller */
         ext.style.left = panel.left + 'px';
         ext.style.width = panel.width + 'px';
-        var extTop = Math.min(barH, 40); /* start just under the menu/minimize icons so nothing shows through */
+        var extTop = Math.min(barH, 40);
         ext.style.top = (panel.top + extTop) + 'px';
         ext.style.height = Math.max(0, total - extTop) + 'px';
         syncLogo();
-        /* Keep the header as the last elements on the page so it stays on top of the Webex window
-           (both use the highest z-index; the later element wins) */
         if (document.body.lastElementChild !== box) { document.body.appendChild(ext); document.body.appendChild(box); }
         box.classList.add('on');
         ext.classList.toggle('on', !!pushed);
